@@ -5,12 +5,12 @@ Developed using spring boot with database as mysql
 
 Steps to run api project:
 
-⎝	Clone the project to your local from https://github.com/manojbompada/businessApplication.git
-⎝	Open in IDE (I used eclipse) as Maven project.
-⎝	Make sure all the properties like database url, username, password, server port are properly configured in application.properties file as per your credentials. These properties are currently set as per my credentials.
-⎝	Make sure you are using the server port where no other process is running.
-⎝	If you are using your own DB, please refer the DDL scripts below and create the tables.
-⎝	Run the project by going into BusinessApplication.java file and run as Java application.
+->	Clone the project to your local from https://github.com/manojbompada/businessApplication.git
+->	Open in IDE (I used eclipse) as Maven project.
+->	Make sure all the properties like database url, username, password, server port are properly configured in application.properties file as per your credentials. These properties are currently set as per my credentials.
+-> Make sure you are using the server port where no other process is running.
+-> If you are using your own DB, please refer the DDL scripts below and create the tables.
+->	Run the project by going into BusinessApplication.java file and run as Java application.
 
 
 DDL scripts for tables creation:
