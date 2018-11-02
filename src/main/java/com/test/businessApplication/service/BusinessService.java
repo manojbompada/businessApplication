@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class BusinessService {
 	
 	@Autowired
 	private WeekDayRepository weekDayRepository;
+	
+	private static final Logger logger = LogManager.getLogger(BusinessService.class);
 
 	/**
 	 * method for getting businesses as per day and time filters
@@ -43,7 +47,7 @@ public class BusinessService {
 	 * @return
 	 */
 	public List<BusinessClientDTO> getAllBusinesses(Integer day, String openTime, String closeTime) {
-		
+		logger.info("===============Inside the method getAllBusinesses=================");
 		List<BusinessClientDTO> businessClientsDto = new ArrayList<>();
 		List<BusinessClient> filteredBusinessClients = new ArrayList<>();
 		ModelMapper mapper = new ModelMapper();
@@ -116,7 +120,7 @@ public class BusinessService {
 	 * @throws BusinessNotFoundException
 	 */
 	public BusinessClientDTO getBusiness(long id) throws BusinessNotFoundException {
-		
+		logger.info("===============Inside the method getBusiness=================");
 		Optional<BusinessClient> businessClient =  businessRepository.findById(id);
 		if (!businessClient.isPresent()) {
 			throw new BusinessNotFoundException(id);
@@ -140,7 +144,7 @@ public class BusinessService {
 	 */
 	@Transactional
 	public BusinessClientDTO updateBusiness(long id, BusinessClientDTO businessClient) throws BusinessNotFoundException {
-		
+		logger.info("===============Inside the method updateBusiness=================");
 		if ("".equals(businessClient.getName())
 				|| businessClient.getPhoneNumber() == null
 				|| businessClient.getBusinessSchedules().isEmpty()) {
@@ -183,7 +187,7 @@ public class BusinessService {
 	 */
 	@Transactional
 	public BusinessClientDTO addBusiness(BusinessClientDTO businessClient) {
-			
+		logger.info("===============Inside the method addBusiness=================");	
 		if ("".equals(businessClient.getName())
 			|| businessClient.getPhoneNumber() == null
 			|| businessClient.getBusinessSchedules().isEmpty()) {

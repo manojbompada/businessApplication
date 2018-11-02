@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +31,11 @@ public class BusinessController {
 	@Autowired
 	private BusinessService businessService;
 	
+	private static final Logger logger = LogManager.getLogger(BusinessService.class);
+	
 //	private String returnSuccess = "{ \"response\" : \"Success\", \"businessId\" : %d }";
 //	private String returnError = "{ \"error\" : \" %s \" }";
+	
 	
 	/**
 	 * api for creating a business
@@ -42,7 +48,7 @@ public class BusinessController {
 			BusinessClientDTO business = businessService.addBusiness(businessClient);
 			return new ResponseEntity<BusinessClientDTO>(business, HttpStatus.OK);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.log(Level.ERROR, e.getMessage(), e);
 			return new ResponseEntity<BusinessClientDTO>(new BusinessClientDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -64,7 +70,7 @@ public class BusinessController {
 			List<BusinessClientDTO> businessList = businessService.getAllBusinesses(dayId,openTime,closeTime);
 			return new ResponseEntity<List<BusinessClientDTO>>(businessList, HttpStatus.OK);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.log(Level.ERROR, e.getMessage(), e);
 			return new ResponseEntity<List<BusinessClientDTO>>(new ArrayList<BusinessClientDTO>(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -80,7 +86,7 @@ public class BusinessController {
 			BusinessClientDTO business = businessService.getBusiness(businessId);
 			return new ResponseEntity<BusinessClientDTO>(business, HttpStatus.OK);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.log(Level.ERROR, e.getMessage(), e);
 			return new ResponseEntity<BusinessClientDTO>(new BusinessClientDTO(), HttpStatus.BAD_REQUEST);
 		}
 		
@@ -100,10 +106,10 @@ public class BusinessController {
 			BusinessClientDTO updatedBusiness = businessService.updateBusiness(businessId, businessClient);
 			return new ResponseEntity<BusinessClientDTO>(updatedBusiness, HttpStatus.OK);
 		} catch (BusinessNotFoundException e) {
-			e.printStackTrace();
+			logger.log(Level.ERROR, e.getMessage(), e);
 			return new ResponseEntity<BusinessClientDTO>(new BusinessClientDTO(), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.log(Level.ERROR, e.getMessage(), e);
 			return new ResponseEntity<BusinessClientDTO>(new BusinessClientDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
