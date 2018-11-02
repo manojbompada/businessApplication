@@ -1,10 +1,8 @@
 package com.test.businessApplication.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,6 +35,13 @@ public class BusinessService {
 	@Autowired
 	private WeekDayRepository weekDayRepository;
 
+	/**
+	 * method for getting businesses as per day and time filters
+	 * @param day
+	 * @param openTime
+	 * @param closeTime
+	 * @return
+	 */
 	public List<BusinessClientDTO> getAllBusinesses(Integer day, String openTime, String closeTime) {
 		
 		List<BusinessClientDTO> businessClientsDto = new ArrayList<>();
@@ -48,6 +53,7 @@ public class BusinessService {
 		if (day != null && day > 0 || openTime != null && !"".equals(openTime) || closeTime != null && !"".equals(closeTime)) {
 			
 			if (day!=null && day > 0) {
+				// filter businesses schedule list based on day 
 				for(BusinessClient businessClient: businessClients) {
 					Set<BusinessSchedule> filteredList = new HashSet<>();
 					for(BusinessSchedule businessSchedule: businessClient.getBusinessSchedules()) {
@@ -60,6 +66,7 @@ public class BusinessService {
 			}
 			
 			if (openTime != null && !"".equals(openTime))  {
+				// filter businesses schedule list based on open time 
 				for(BusinessClient businessClient: businessClients) {
 					Set<BusinessSchedule> filteredList = new HashSet<>();
 					for(BusinessSchedule businessSchedule: businessClient.getBusinessSchedules()) {
@@ -72,6 +79,7 @@ public class BusinessService {
 			}
 			
 			if (closeTime != null && !"".equals(closeTime))  {
+				// filter businesses schedule list based on close time 
 				for(BusinessClient businessClient: businessClients) {
 					Set<BusinessSchedule> filteredList = new HashSet<>();
 					for(BusinessSchedule businessSchedule: businessClient.getBusinessSchedules()) {
@@ -85,10 +93,13 @@ public class BusinessService {
 			
 			for(BusinessClient businessClient: businessClients) {
 				if (businessClient.getBusinessSchedules() != null && !businessClient.getBusinessSchedules().isEmpty()) {
+					// after filtering the schedules as per filters, add businesses to final list where the 
+					// businesses schedule list is not empty
 					filteredBusinessClients.add(businessClient);
 				}
 			}
 			
+			//object to DTO
 			businessClientsDto = mapper.map(filteredBusinessClients, new TypeToken<List<BusinessClientDTO>>() {}.getType());
 		} else {
 			businessClientsDto = mapper.map(businessClients, new TypeToken<List<BusinessClientDTO>>() {}.getType());
@@ -98,6 +109,12 @@ public class BusinessService {
 	
 	}
 	
+	/**
+	 * method for getting business by business Id
+	 * @param id
+	 * @return
+	 * @throws BusinessNotFoundException
+	 */
 	public BusinessClientDTO getBusiness(long id) throws BusinessNotFoundException {
 		
 		Optional<BusinessClient> businessClient =  businessRepository.findById(id);
@@ -108,11 +125,19 @@ public class BusinessService {
 		ModelMapper mapper = new ModelMapper();
 		BusinessClientDTO businessClientDto = new BusinessClientDTO();
 		
+		//object to DTO
 		businessClientDto = mapper.map(business, new TypeToken<BusinessClientDTO>() {}.getType());
 		return businessClientDto;
 				 
 	}
-	 
+	
+	/**
+	 * method for updating business details
+	 * @param id
+	 * @param businessClient
+	 * @return
+	 * @throws BusinessNotFoundException
+	 */
 	@Transactional
 	public BusinessClientDTO updateBusiness(long id, BusinessClientDTO businessClient) throws BusinessNotFoundException {
 		
@@ -150,11 +175,12 @@ public class BusinessService {
 		}
 		return businessClient;	
 	}
-	
-	public void deleteBusiness(BusinessClient business) {
-		businessRepository.delete(business);
-	}
 
+	/**
+	 * method for creating a business
+	 * @param businessClient
+	 * @return
+	 */
 	@Transactional
 	public BusinessClientDTO addBusiness(BusinessClientDTO businessClient) {
 			
@@ -175,8 +201,9 @@ public class BusinessService {
 		Set<BusinessScheduleDTO> businessDTOSchedules = businessClient.getBusinessSchedules();
 		
 		if (!businessDTOSchedules.isEmpty()) {
-			// save schedules for business
+			
 			for(BusinessScheduleDTO schedule: businessDTOSchedules) {
+				//creating business schedule object
 				BusinessSchedule businessSchedule = new BusinessSchedule();
 				BusinessSchedulePK businessSchedulePK = new BusinessSchedulePK();
 				businessSchedulePK.setBusinessId(business.getId());

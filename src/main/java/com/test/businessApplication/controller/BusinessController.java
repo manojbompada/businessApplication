@@ -32,7 +32,9 @@ public class BusinessController {
 //	private String returnError = "{ \"error\" : \" %s \" }";
 	
 	/**
-	 * save a business
+	 * api for creating a business
+	 * @param businessClient
+	 * @return
 	 */
 	@PostMapping("/businesses")
 	public ResponseEntity<BusinessClientDTO> createBusiness(@Valid @RequestBody BusinessClientDTO businessClient) {
@@ -45,6 +47,13 @@ public class BusinessController {
 		}
 	}
 	
+	/**
+	 * api to get the list of all businesses and filter businesses as per time slot
+	 * @param dayId
+	 * @param openTime
+	 * @param closeTime
+	 * @return
+	 */
 	@GetMapping("/businesses")
 	public ResponseEntity<List<BusinessClientDTO>> getAllBusinesses(
 			@RequestParam (value = "dayId", required = false) Integer dayId,
@@ -60,6 +69,11 @@ public class BusinessController {
 		}
 	}
 	
+	/**
+	 * api to get the details of a business
+	 * @param businessId
+	 * @return
+	 */
 	@GetMapping("/businesses/{id}")
 	public ResponseEntity<BusinessClientDTO> getBusinessById(@PathVariable(value="id") long businessId) {
 		try {
@@ -72,6 +86,12 @@ public class BusinessController {
 		
 	}
 	
+	/**
+	 * api for updating business details
+	 * @param businessId
+	 * @param businessClient
+	 * @return
+	 */
 	@PutMapping("/businesses/{id}")
 	public ResponseEntity<BusinessClientDTO> updateBusiness(
 			@PathVariable(value="id") long businessId,
@@ -88,7 +108,6 @@ public class BusinessController {
 		}
 		
 	}
-	
 
 	
 }
